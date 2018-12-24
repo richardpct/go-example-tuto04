@@ -1,7 +1,4 @@
-/*
-Program used by https://github.com/richardpct/aws-terraform-tuto04
-It creates a web server and displays the count of requests using a redis server
-*/
+// Program used by https://github.com/richardpct/aws-terraform-tuto04
 package main
 
 import (
@@ -14,11 +11,12 @@ import (
 
 var redisHost = flag.String("redishost", "", "redis server")
 var redisPass = flag.String("redispass", "", "redis password")
+var env = flag.String("env", "", "environment")
 var redisdb *redis.Client
 
 func checkArgs() error {
-	if *redisHost == "" || *redisPass == "" {
-		return fmt.Errorf("Arguments redishost and/or redispass are missing")
+	if *redisHost == "" || *redisPass == "" || *env == "" {
+		return fmt.Errorf("Arguments redishost and/or redispass and/or env are missing")
 	}
 	return nil
 }
@@ -34,7 +32,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Fprintf(w, "counter = %q\n", v)
+	fmt.Fprintf(w, "environment = %s\ncounter = %q\n", *env, v)
 }
 
 func main() {
