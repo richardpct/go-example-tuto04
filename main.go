@@ -35,6 +35,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "environment = %s\ncounter = %q\n", *env, v)
 }
 
+func ping(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "OK")
+}
+
 func main() {
 	flag.Parse()
 	if err := checkArgs(); err != nil {
@@ -53,5 +57,6 @@ func main() {
 	}
 
 	http.HandleFunc("/", handler)
+	http.HandleFunc("/ping", ping)
 	log.Fatal(http.ListenAndServe("0.0.0.0:80", nil))
 }
